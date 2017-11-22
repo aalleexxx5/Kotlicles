@@ -1,0 +1,3 @@
+interface Animatable {
+    fun update()
+}
