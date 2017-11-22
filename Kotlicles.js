@@ -40,15 +40,15 @@ var Kotlicles = function (_, Kotlin) {
     this.color.update();
   };
   Helix.prototype.isOutOfBounds_vux9f0$ = function (width, height) {
-    return this.dynamics.x < 0 - this.radius || this.dynamics.y < 0 - this.radius || this.dynamics.x > width + this.radius || this.dynamics.y > height - this.radius;
+    return this.dynamics.x < 0 - this.radius || this.dynamics.y < 0 - this.radius || this.dynamics.x > width + this.radius || this.dynamics.y > height + this.radius;
   };
   Helix.prototype.draw_f69bme$ = function (ctx) {
     ctx.save();
     ctx.translate(this.dynamics.x, this.dynamics.y);
     ctx.rotate(this.dynamics.r);
     ctx.fillStyle = this.color.toString();
-    ctx.strokeStyle = this.color.toString();
-    ctx.lineWidth = 1.0;
+    ctx.strokeStyle = this.color.halfIntensity();
+    ctx.lineWidth = 0.8;
     ctx.beginPath();
     ctx.arc(0.0, 0.0, this.radius, 0.0, 1.0);
     ctx.fill();
@@ -74,7 +74,6 @@ var Kotlicles = function (_, Kotlin) {
   }
   Page.prototype.animate = function () {
     this.darken_8nku3g$(this.ctx_0.canvas.width, this.ctx_0.canvas.height, this.ctx_0, 1);
-    this.ctx_0.globalCompositeOperation = 'lighten';
     var tmp$;
     tmp$ = filterNotNull(this.particles).iterator();
     while (tmp$.hasNext()) {
@@ -93,9 +92,6 @@ var Kotlicles = function (_, Kotlin) {
       pixelData[i] -= amount;
     }
     ctx.putImageData(lastImage, 0, 0);
-  };
-  Page.prototype.logToConsole_61zpoe$ = function (message) {
-    console.log(message);
   };
   Page.prototype.populateParticles_0 = function () {
     var $receiver = this.particles;
@@ -131,8 +127,7 @@ var Kotlicles = function (_, Kotlin) {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     var ctx = Kotlin.isType(tmp$_0 = canvas.getContext('2d'), CanvasRenderingContext2D) ? tmp$_0 : throwCCE();
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0.0, 0.0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = 'lighten';
     new Page(ctx);
   }
   function HueColorAnimation() {
@@ -146,6 +141,9 @@ var Kotlicles = function (_, Kotlin) {
   };
   HueColorAnimation.prototype.toString = function () {
     return 'hsl(' + this.h + ',' + this.s + '%,' + this.l + '%)';
+  };
+  HueColorAnimation.prototype.halfIntensity = function () {
+    return 'hsl(' + this.h + ',' + (this.s / 2 | 0) + '%,' + this.l + '%)';
   };
   HueColorAnimation.$metadata$ = {
     kind: Kind_CLASS,

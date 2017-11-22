@@ -14,4 +14,6 @@ class HueColorAnimation() {
     }
 
     override fun toString(): String = "hsl($h,$s%,$l%)"
+
+    fun halfIntensity() : String = "hsl($h,20%,20%)"
 }
