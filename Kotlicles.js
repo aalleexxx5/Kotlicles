@@ -4,8 +4,8 @@ if (typeof kotlin === 'undefined') {
 var Kotlicles = function (_, Kotlin) {
   'use strict';
   var Kind_INTERFACE = Kotlin.Kind.INTERFACE;
-  var throwCCE = Kotlin.throwCCE;
   var Kind_CLASS = Kotlin.Kind.CLASS;
+  var throwCCE = Kotlin.throwCCE;
   var filterNotNull = Kotlin.kotlin.collections.filterNotNull_emfgvx$;
   var Unit = Kotlin.kotlin.Unit;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
@@ -17,13 +17,11 @@ var Kotlicles = function (_, Kotlin) {
     simpleName: 'Animatable',
     interfaces: [Drawable]
   };
-  function AppearingImage(dynamics, src, appearX, appearY) {
+  function AppearingImage(dynamics, image, appearX, appearY) {
     this.dynamics = dynamics;
+    this.image = image;
     this.appearX = appearX;
     this.appearY = appearY;
-    var tmp$;
-    this.image = Kotlin.isType(tmp$ = document.createElement('img'), HTMLImageElement) ? tmp$ : throwCCE();
-    this.image.setAttribute('src', src);
   }
   AppearingImage.prototype.update = function () {
     this.dynamics.update();
@@ -39,6 +37,14 @@ var Kotlicles = function (_, Kotlin) {
     simpleName: 'AppearingImage',
     interfaces: [Animatable]
   };
+  function AppearingImage_init(dynamics, src, appearX, appearY, $this) {
+    $this = $this || Object.create(AppearingImage.prototype);
+    var tmp$, tmp$_0;
+    tmp$_0 = Kotlin.isType(tmp$ = document.createElement('img'), HTMLImageElement) ? tmp$ : throwCCE();
+    AppearingImage.call($this, dynamics, tmp$_0, appearX, appearX);
+    $this.image.setAttribute('src', src);
+    return $this;
+  }
   function Clickable() {
   }
   Clickable.$metadata$ = {
@@ -156,7 +162,8 @@ var Kotlicles = function (_, Kotlin) {
   };
   function Page(ctx) {
     this.ctx = ctx;
-    this.image = new AppearingImage(new Dynamics(400.0, 0.0, 0.0, 0.0, -20.0), 'Light.png', 800, 800);
+    var tmp$;
+    this.image = new AppearingImage(new Dynamics(400.0, 0.0, 0.0, 0.0, -20.0), Kotlin.isType(tmp$ = document.getElementById('light'), HTMLImageElement) ? tmp$ : throwCCE(), 800, 800);
     this.animate();
   }
   function Page$animate$lambda(this$Page) {
@@ -166,7 +173,7 @@ var Kotlicles = function (_, Kotlin) {
     };
   }
   Page.prototype.animate = function () {
-    this.ctx.clearRect(0.0, 0.0, this.ctx.canvas.width, this.ctx.canvas.height);
+    this.darken_8nku3g$(this.ctx.canvas.width, this.ctx.canvas.height, this.ctx, 1);
     this.image.draw_f69bme$(this.ctx);
     if (!this.image.isOutOfBounds_vux9f0$(0, 0))
       this.image.update();
@@ -370,6 +377,7 @@ var Kotlicles = function (_, Kotlin) {
     return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.x, other.x) && Kotlin.equals(this.y, other.y) && Kotlin.equals(this.r, other.r) && Kotlin.equals(this.dx, other.dx) && Kotlin.equals(this.dy, other.dy) && Kotlin.equals(this.dr, other.dr)))));
   };
   _.Animatable = Animatable;
+  _.AppearingImage_init_qa5loa$ = AppearingImage_init;
   _.AppearingImage = AppearingImage;
   _.Clickable = Clickable;
   _.Drawable = Drawable;

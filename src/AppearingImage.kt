@@ -3,11 +3,10 @@ import org.w3c.dom.HTMLImageElement
 import kotlin.browser.document
 import kotlin.js.Math
 
-class AppearingImage(val dynamics: Dynamics, src : String, val appearX : Int, val appearY : Int) : Animatable {
+class AppearingImage(val dynamics: Dynamics, val image : HTMLImageElement, val appearX : Int, val appearY : Int) : Animatable {
 
-    val image = document.createElement("img") as HTMLImageElement
-    init {
-        image.setAttribute("src",src)
+    constructor(dynamics: Dynamics,src : String, appearX: Int, appearY: Int) : this(dynamics, document.createElement("img") as HTMLImageElement,appearX,appearX){
+        image.setAttribute("src", src)
     }
 
     override fun update() {

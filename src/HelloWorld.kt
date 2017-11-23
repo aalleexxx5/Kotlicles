@@ -1,12 +1,13 @@
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
+import org.w3c.dom.HTMLImageElement
 import kotlin.browser.document
 import kotlin.browser.window
 
 class Page(val ctx: CanvasRenderingContext2D){
     var image = AppearingImage(
             Dynamics(400.0,0.0,0.0,0.0,-20.0),
-            "Light.png",
+            document.getElementById("light") as HTMLImageElement,
             800,800
     )
     init {
@@ -14,10 +15,13 @@ class Page(val ctx: CanvasRenderingContext2D){
     }
 
     fun animate(){
-        ctx.clearRect(0.0,0.0,ctx.canvas.width.toDouble(),ctx.canvas.height.toDouble())
-        //darken(ctx.canvas.width,ctx.canvas.height,ctx,1)
-        image.draw(ctx)
-        if (!image.isOutOfBounds(0,0)) image.update()
+        if (!image.isOutOfBounds(0,0)) {
+            ctx.clearRect(0.0,0.0,ctx.canvas.width.toDouble(),ctx.canvas.height.toDouble())
+            image.draw(ctx)
+            image.update()
+        }else{
+            darken(ctx.canvas.width,ctx.canvas.height,ctx,5)
+        }
         kotlin.browser.window.requestAnimationFrame { animate() }
     }
 
