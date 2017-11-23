@@ -22,8 +22,8 @@ class AppearingImage(val dynamics: Dynamics, val image : HTMLImageElement, val a
         // Assume image is moving up in a straight line
 
         //ctx.drawImage(image,appearX+dynamics.x,appearY+dynamics.y,Math.abs(dynamics.x),Math.abs(dynamics.y))
+        ctx.drawImage(image,0.0,0.0, Math.abs(dynamics.x),Math.abs(dynamics.y),appearX.toDouble(),appearY+dynamics.y,Math.abs(dynamics.x),Math.abs(dynamics.y))
 
-        ctx.drawImage(image,0.0,0.0, Math.abs(dynamics.x),Math.abs(dynamics.y),appearX+dynamics.x,appearY+dynamics.y,Math.abs(dynamics.x),Math.abs(dynamics.y))
     }
 
 }

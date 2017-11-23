@@ -30,7 +30,7 @@ var Kotlicles = function (_, Kotlin) {
     return Math.abs(this.dynamics.x) > this.image.width || Math.abs(this.dynamics.y) > this.image.height;
   };
   AppearingImage.prototype.draw_f69bme$ = function (ctx) {
-    ctx.drawImage(this.image, 0.0, 0.0, Math.abs(this.dynamics.x), Math.abs(this.dynamics.y), this.appearX + this.dynamics.x, this.appearY + this.dynamics.y, Math.abs(this.dynamics.x), Math.abs(this.dynamics.y));
+    ctx.drawImage(this.image, 0.0, 0.0, Math.abs(this.dynamics.x), Math.abs(this.dynamics.y), this.appearX, this.appearY, Math.abs(this.dynamics.x), Math.abs(this.dynamics.y));
   };
   AppearingImage.$metadata$ = {
     kind: Kind_CLASS,
@@ -163,7 +163,7 @@ var Kotlicles = function (_, Kotlin) {
   function Page(ctx) {
     this.ctx = ctx;
     var tmp$;
-    this.image = new AppearingImage(new Dynamics(400.0, 0.0, 0.0, 0.0, -20.0), Kotlin.isType(tmp$ = document.getElementById('light'), HTMLImageElement) ? tmp$ : throwCCE(), 800, 800);
+    this.image = new AppearingImage(new Dynamics(400.0, 0.0, 0.0, 0.0, -20.0), Kotlin.isType(tmp$ = document.getElementById('light'), HTMLImageElement) ? tmp$ : throwCCE(), 0, this.ctx.canvas.height / 1.25 | 0);
     this.animate();
   }
   function Page$animate$lambda(this$Page) {
@@ -173,10 +173,14 @@ var Kotlicles = function (_, Kotlin) {
     };
   }
   Page.prototype.animate = function () {
-    this.darken_8nku3g$(this.ctx.canvas.width, this.ctx.canvas.height, this.ctx, 1);
-    this.image.draw_f69bme$(this.ctx);
-    if (!this.image.isOutOfBounds_vux9f0$(0, 0))
+    if (!this.image.isOutOfBounds_vux9f0$(0, 0)) {
+      this.ctx.clearRect(0.0, 0.0, this.ctx.canvas.width, this.ctx.canvas.height);
+      this.image.draw_f69bme$(this.ctx);
       this.image.update();
+    }
+     else {
+      this.darken_8nku3g$(this.ctx.canvas.width, this.ctx.canvas.height, this.ctx, 5);
+    }
     window.requestAnimationFrame(Page$animate$lambda(this));
   };
   Page.prototype.darken_8nku3g$ = function (width, height, ctx, amount) {

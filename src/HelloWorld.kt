@@ -8,7 +8,7 @@ class Page(val ctx: CanvasRenderingContext2D){
     var image = AppearingImage(
             Dynamics(400.0,0.0,0.0,0.0,-20.0),
             document.getElementById("light") as HTMLImageElement,
-            800,800
+            0,(ctx.canvas.height/1.25).toInt()
     )
     init {
         animate()
