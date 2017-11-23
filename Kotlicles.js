@@ -9,6 +9,7 @@ var Kotlicles = function (_, Kotlin) {
   var Unit = Kotlin.kotlin.Unit;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
   var throwCCE = Kotlin.throwCCE;
+  var first = Kotlin.kotlin.collections.first_us0mfu$;
   function Animatable() {
   }
   Animatable.$metadata$ = {
@@ -43,15 +44,19 @@ var Kotlicles = function (_, Kotlin) {
     return this.dynamics.x < 0 - this.radius || this.dynamics.y < 0 - this.radius || this.dynamics.x > width + this.radius || this.dynamics.y > height + this.radius;
   };
   Helix.prototype.draw_f69bme$ = function (ctx) {
+    ctx.fillStyle = this.color.toString();
+    ctx.strokeStyle = this.color.toString();
+    ctx.lineWidth = 5.0;
     ctx.save();
     ctx.translate(this.dynamics.x, this.dynamics.y);
     ctx.rotate(this.dynamics.r);
-    ctx.fillStyle = this.color.toString();
-    ctx.strokeStyle = this.color.halfIntensity();
-    ctx.lineWidth = 0.8;
     ctx.beginPath();
-    ctx.arc(0.0, 0.0, this.radius, 0.0, 1.0);
-    ctx.fill();
+    ctx.moveTo(this.radius, 0.0);
+    ctx.rotate(-this.dynamics.r);
+    ctx.translate(this.dynamics.dx, this.dynamics.dy);
+    ctx.rotate(this.dynamics.r + this.dynamics.dr);
+    ctx.lineTo(this.radius, 0.0);
+    ctx.closePath();
     ctx.stroke();
     ctx.restore();
   };
@@ -101,7 +106,12 @@ var Kotlicles = function (_, Kotlin) {
       var item = $receiver[tmp$];
       var index_0 = (tmp$_0 = index, index = tmp$_0 + 1 | 0, tmp$_0);
       if (item == null || item.isOutOfBounds_vux9f0$(this.ctx_0.canvas.width, this.ctx_0.canvas.height)) {
-        this.particles[index_0] = this.randomHelix();
+        if (Math.random() < 0.8) {
+          this.particles[index_0] = this.randomDoubleHelix();
+        }
+         else {
+          this.particles[index_0] = this.randomHelix();
+        }
       }
     }
   };
@@ -112,7 +122,10 @@ var Kotlicles = function (_, Kotlin) {
     return new Particle(new Dynamics(Math.random() * this.ctx_0.canvas.width, Math.random() * this.ctx_0.canvas.height, Math.random() * 2 * Math.PI, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() - 0.5), 20.0);
   };
   Page.prototype.randomHelix = function () {
-    return new Helix(new Dynamics(Math.random() * this.ctx_0.canvas.width, Math.random() * this.ctx_0.canvas.height, Math.random() * 2 * Math.PI, Math.random() * 6 - 3, Math.random() * 6 - 3, Math.random() - 0.5), 30.0);
+    return new LineHelix(new Dynamics(Math.random() * this.ctx_0.canvas.width, Math.random() * this.ctx_0.canvas.height, Math.random() * 2 * Math.PI, Math.random() * 6 - 3, Math.random() * 6 - 3, Math.random() / 1.5 - 0.33), 30.0);
+  };
+  Page.prototype.randomDoubleHelix = function () {
+    return new NHelix(new Dynamics(Math.random() * this.ctx_0.canvas.width, Math.random() * this.ctx_0.canvas.height, Math.random() * 2 * Math.PI, Math.random() * 6 - 3, Math.random() * 6 - 3, Math.random() / 2 - 0.25), 30.0, 2);
   };
   Page.$metadata$ = {
     kind: Kind_CLASS,
@@ -143,12 +156,74 @@ var Kotlicles = function (_, Kotlin) {
     return 'hsl(' + this.h + ',' + this.s + '%,' + this.l + '%)';
   };
   HueColorAnimation.prototype.halfIntensity = function () {
-    return 'hsl(' + this.h + ',' + (this.s / 2 | 0) + '%,' + this.l + '%)';
+    return 'hsl(' + this.h + ',20%,20%)';
   };
   HueColorAnimation.$metadata$ = {
     kind: Kind_CLASS,
     simpleName: 'HueColorAnimation',
     interfaces: []
+  };
+  function LineHelix(dynamics, radius) {
+    this.dynamics = dynamics;
+    this.radius = radius;
+    this.color = new HueColorAnimation();
+  }
+  LineHelix.prototype.update = function () {
+    this.dynamics.update();
+    this.color.update();
+  };
+  LineHelix.prototype.isOutOfBounds_vux9f0$ = function (width, height) {
+    return this.dynamics.x < 0 - this.radius || this.dynamics.y < 0 - this.radius || this.dynamics.x > width + this.radius || this.dynamics.y > height + this.radius;
+  };
+  LineHelix.prototype.draw_f69bme$ = function (ctx) {
+    ctx.save();
+    ctx.translate(this.dynamics.x, this.dynamics.y);
+    ctx.rotate(this.dynamics.r);
+    ctx.fillStyle = this.color.toString();
+    ctx.fillRect(0.0, this.radius, 20.0, 1.0);
+    ctx.restore();
+  };
+  LineHelix.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'LineHelix',
+    interfaces: [Animatable, Drawable]
+  };
+  var Array_0 = Array;
+  function NHelix(dynamics, radius, n) {
+    this.dynamics = dynamics;
+    this.radius = radius;
+    this.n = n;
+    var array = Array_0(this.n);
+    var tmp$;
+    tmp$ = array.length - 1 | 0;
+    for (var i = 0; i <= tmp$; i++) {
+      array[i] = new LineHelix(new Dynamics(this.dynamics.x, this.dynamics.y, 2 * Math.PI / this.n * i, this.dynamics.dx, this.dynamics.dy, this.dynamics.dr), this.radius);
+    }
+    this.helices = array;
+  }
+  NHelix.prototype.update = function () {
+    var $receiver = this.helices;
+    var tmp$;
+    for (tmp$ = 0; tmp$ !== $receiver.length; ++tmp$) {
+      var element = $receiver[tmp$];
+      element.update();
+    }
+  };
+  NHelix.prototype.isOutOfBounds_vux9f0$ = function (width, height) {
+    return first(this.helices).isOutOfBounds_vux9f0$(width, height);
+  };
+  NHelix.prototype.draw_f69bme$ = function (ctx) {
+    var $receiver = this.helices;
+    var tmp$;
+    for (tmp$ = 0; tmp$ !== $receiver.length; ++tmp$) {
+      var element = $receiver[tmp$];
+      element.draw_f69bme$(ctx);
+    }
+  };
+  NHelix.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'NHelix',
+    interfaces: [Animatable]
   };
   function Particle(dynamics, radius) {
     this.dynamics = dynamics;
@@ -247,6 +322,8 @@ var Kotlicles = function (_, Kotlin) {
   _.Page = Page;
   _.main_kand9s$ = main;
   _.HueColorAnimation = HueColorAnimation;
+  _.LineHelix = LineHelix;
+  _.NHelix = NHelix;
   _.Particle = Particle;
   _.Dynamics = Dynamics;
   main([]);

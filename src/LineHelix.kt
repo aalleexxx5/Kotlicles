@@ -18,14 +18,9 @@ class LineHelix(val dynamics: Dynamics, val radius : Double) : Drawable, Animata
         ctx.translate(dynamics.x,dynamics.y)
         ctx.rotate(dynamics.r)
         ctx.fillStyle = color.toString()
-        //ctx.strokeStyle = color.halfIntensity()
-        ctx.strokeStyle = "#888"
-        ctx.lineWidth = 3.5
-        //ctx.beginPath()
-        ctx.fillRect(radius,radius,30.0,1.0);
-        //ctx.arc(0.0,0.0,radius,0.0,1.0)
-        //ctx.fill()
-        //ctx.stroke()
+
+        ctx.fillRect(0.0,radius,20.0,1.0)
+
         ctx.restore()
     }
 }

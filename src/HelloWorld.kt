@@ -1,5 +1,6 @@
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
+import org.w3c.dom.svg.SVGImageElement
 import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.js.Math
@@ -24,7 +25,12 @@ class Page(private var ctx: CanvasRenderingContext2D) {
     private fun populateParticles(){
         particles.forEachIndexed { index, particle ->
             if (particle == null||particle.isOutOfBounds(ctx.canvas.width,ctx.canvas.height)) {
-                particles[index] = randomHelix()
+                if (Math.random() < 0.1) {
+                    particles[index] = randomDoubleHelix()
+                }
+                else {
+                    particles[index] = randomHelix()
+                }
             } }
     }
 
@@ -42,17 +48,30 @@ class Page(private var ctx: CanvasRenderingContext2D) {
                 ),
         20.0)
     }
-    fun randomHelix() : Helix {
-        return Helix(
+    fun randomHelix() : LineHelix {
+        return LineHelix(
                 Dynamics(
                         Math.random()*ctx.canvas.width,
                         Math.random()*ctx.canvas.height,
                         Math.random()*2*Math.PI,
                         Math.random()*6-3,
                         Math.random()*6-3,
-                        Math.random()-0.5
+                        Math.random()/1.5-0.33
                 ),
         30.0)
+    }
+
+    fun randomDoubleHelix() : NHelix {
+        return NHelix(
+                Dynamics(
+                        Math.random()*ctx.canvas.width,
+                        Math.random()*ctx.canvas.height,
+                        Math.random()*2*Math.PI,
+                        Math.random()*6-3,
+                        Math.random()*6-3,
+                        Math.random()/2-0.25
+                ),
+                30.0, 2)
     }
 }
 
