@@ -4,11 +4,11 @@ if (typeof kotlin === 'undefined') {
 var Kotlicles = function (_, Kotlin) {
   'use strict';
   var Kind_INTERFACE = Kotlin.Kind.INTERFACE;
+  var throwCCE = Kotlin.throwCCE;
   var Kind_CLASS = Kotlin.Kind.CLASS;
   var filterNotNull = Kotlin.kotlin.collections.filterNotNull_emfgvx$;
   var Unit = Kotlin.kotlin.Unit;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
-  var throwCCE = Kotlin.throwCCE;
   var first = Kotlin.kotlin.collections.first_us0mfu$;
   function Animatable() {
   }
@@ -16,6 +16,28 @@ var Kotlicles = function (_, Kotlin) {
     kind: Kind_INTERFACE,
     simpleName: 'Animatable',
     interfaces: [Drawable]
+  };
+  function AppearingImage(dynamics, src, appearX, appearY) {
+    this.dynamics = dynamics;
+    this.appearX = appearX;
+    this.appearY = appearY;
+    var tmp$;
+    this.image = Kotlin.isType(tmp$ = document.createElement('img'), HTMLImageElement) ? tmp$ : throwCCE();
+    this.image.setAttribute('src', src);
+  }
+  AppearingImage.prototype.update = function () {
+    this.dynamics.update();
+  };
+  AppearingImage.prototype.isOutOfBounds_vux9f0$ = function (width, height) {
+    return Math.abs(this.dynamics.x) > this.image.width || Math.abs(this.dynamics.y) > this.image.height;
+  };
+  AppearingImage.prototype.draw_f69bme$ = function (ctx) {
+    ctx.drawImage(this.image, 0.0, 0.0, Math.abs(this.dynamics.x), Math.abs(this.dynamics.y), this.appearX + this.dynamics.x, this.appearY + this.dynamics.y, Math.abs(this.dynamics.x), Math.abs(this.dynamics.y));
+  };
+  AppearingImage.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'AppearingImage',
+    interfaces: [Animatable]
   };
   function Clickable() {
   }
@@ -65,19 +87,19 @@ var Kotlicles = function (_, Kotlin) {
     simpleName: 'Helix',
     interfaces: [Animatable, Drawable]
   };
-  function Page(ctx) {
+  function HelixPage(ctx) {
     this.ctx_0 = ctx;
     this.particles = Kotlin.newArray(20, null);
     this.populateParticles_0();
     this.animate();
   }
-  function Page$animate$lambda(this$Page) {
+  function HelixPage$animate$lambda(this$HelixPage) {
     return function (it) {
-      this$Page.animate();
+      this$HelixPage.animate();
       return Unit;
     };
   }
-  Page.prototype.animate = function () {
+  HelixPage.prototype.animate = function () {
     this.darken_8nku3g$(this.ctx_0.canvas.width, this.ctx_0.canvas.height, this.ctx_0, 1);
     var tmp$;
     tmp$ = filterNotNull(this.particles).iterator();
@@ -87,6 +109,67 @@ var Kotlicles = function (_, Kotlin) {
       element.update();
     }
     this.populateParticles_0();
+    window.requestAnimationFrame(HelixPage$animate$lambda(this));
+  };
+  HelixPage.prototype.darken_8nku3g$ = function (width, height, ctx, amount) {
+    var lastImage = ctx.getImageData(0, 0, width, height);
+    var pixelData = lastImage.data;
+    var i;
+    for (i = 3; i < pixelData.length; i += 4) {
+      pixelData[i] -= amount;
+    }
+    ctx.putImageData(lastImage, 0, 0);
+  };
+  HelixPage.prototype.populateParticles_0 = function () {
+    var $receiver = this.particles;
+    var tmp$, tmp$_0;
+    var index = 0;
+    for (tmp$ = 0; tmp$ !== $receiver.length; ++tmp$) {
+      var item = $receiver[tmp$];
+      var index_0 = (tmp$_0 = index, index = tmp$_0 + 1 | 0, tmp$_0);
+      if (item == null || item.isOutOfBounds_vux9f0$(this.ctx_0.canvas.width, this.ctx_0.canvas.height)) {
+        if (Math.random() < 0.1) {
+          this.particles[index_0] = this.randomDoubleHelix();
+        }
+         else {
+          this.particles[index_0] = this.randomHelix();
+        }
+      }
+    }
+  };
+  HelixPage.prototype.specifiedParticle = function () {
+    return new Particle(new Dynamics(500.0, 500.0, 50.0, 0.1, 0.1, 0.0), 50.0);
+  };
+  HelixPage.prototype.randomParticle = function () {
+    return new Particle(new Dynamics(Math.random() * this.ctx_0.canvas.width, Math.random() * this.ctx_0.canvas.height, Math.random() * 2 * Math.PI, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() - 0.5), 20.0);
+  };
+  HelixPage.prototype.randomHelix = function () {
+    return new LineHelix(new Dynamics(Math.random() * this.ctx_0.canvas.width, Math.random() * this.ctx_0.canvas.height, Math.random() * 2 * Math.PI, Math.random() * 6 - 3, Math.random() * 6 - 3, Math.random() / 1.5 - 0.33), 30.0);
+  };
+  HelixPage.prototype.randomDoubleHelix = function () {
+    return new NHelix(new Dynamics(Math.random() * this.ctx_0.canvas.width, Math.random() * this.ctx_0.canvas.height, Math.random() * 2 * Math.PI, Math.random() * 6 - 3, Math.random() * 6 - 3, Math.random() / 2 - 0.25), 30.0, 2);
+  };
+  HelixPage.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'HelixPage',
+    interfaces: []
+  };
+  function Page(ctx) {
+    this.ctx = ctx;
+    this.image = new AppearingImage(new Dynamics(400.0, 0.0, 0.0, 0.0, -20.0), 'Light.png', 800, 800);
+    this.animate();
+  }
+  function Page$animate$lambda(this$Page) {
+    return function (it) {
+      this$Page.animate();
+      return Unit;
+    };
+  }
+  Page.prototype.animate = function () {
+    this.ctx.clearRect(0.0, 0.0, this.ctx.canvas.width, this.ctx.canvas.height);
+    this.image.draw_f69bme$(this.ctx);
+    if (!this.image.isOutOfBounds_vux9f0$(0, 0))
+      this.image.update();
     window.requestAnimationFrame(Page$animate$lambda(this));
   };
   Page.prototype.darken_8nku3g$ = function (width, height, ctx, amount) {
@@ -97,35 +180,6 @@ var Kotlicles = function (_, Kotlin) {
       pixelData[i] -= amount;
     }
     ctx.putImageData(lastImage, 0, 0);
-  };
-  Page.prototype.populateParticles_0 = function () {
-    var $receiver = this.particles;
-    var tmp$, tmp$_0;
-    var index = 0;
-    for (tmp$ = 0; tmp$ !== $receiver.length; ++tmp$) {
-      var item = $receiver[tmp$];
-      var index_0 = (tmp$_0 = index, index = tmp$_0 + 1 | 0, tmp$_0);
-      if (item == null || item.isOutOfBounds_vux9f0$(this.ctx_0.canvas.width, this.ctx_0.canvas.height)) {
-        if (Math.random() < 0.8) {
-          this.particles[index_0] = this.randomDoubleHelix();
-        }
-         else {
-          this.particles[index_0] = this.randomHelix();
-        }
-      }
-    }
-  };
-  Page.prototype.specifiedParticle = function () {
-    return new Particle(new Dynamics(500.0, 500.0, 50.0, 0.1, 0.1, 0.0), 50.0);
-  };
-  Page.prototype.randomParticle = function () {
-    return new Particle(new Dynamics(Math.random() * this.ctx_0.canvas.width, Math.random() * this.ctx_0.canvas.height, Math.random() * 2 * Math.PI, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() - 0.5), 20.0);
-  };
-  Page.prototype.randomHelix = function () {
-    return new LineHelix(new Dynamics(Math.random() * this.ctx_0.canvas.width, Math.random() * this.ctx_0.canvas.height, Math.random() * 2 * Math.PI, Math.random() * 6 - 3, Math.random() * 6 - 3, Math.random() / 1.5 - 0.33), 30.0);
-  };
-  Page.prototype.randomDoubleHelix = function () {
-    return new NHelix(new Dynamics(Math.random() * this.ctx_0.canvas.width, Math.random() * this.ctx_0.canvas.height, Math.random() * 2 * Math.PI, Math.random() * 6 - 3, Math.random() * 6 - 3, Math.random() / 2 - 0.25), 30.0, 2);
   };
   Page.$metadata$ = {
     kind: Kind_CLASS,
@@ -316,9 +370,11 @@ var Kotlicles = function (_, Kotlin) {
     return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.x, other.x) && Kotlin.equals(this.y, other.y) && Kotlin.equals(this.r, other.r) && Kotlin.equals(this.dx, other.dx) && Kotlin.equals(this.dy, other.dy) && Kotlin.equals(this.dr, other.dr)))));
   };
   _.Animatable = Animatable;
+  _.AppearingImage = AppearingImage;
   _.Clickable = Clickable;
   _.Drawable = Drawable;
   _.Helix = Helix;
+  _.HelixPage = HelixPage;
   _.Page = Page;
   _.main_kand9s$ = main;
   _.HueColorAnimation = HueColorAnimation;
