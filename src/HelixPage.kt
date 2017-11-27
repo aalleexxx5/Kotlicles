@@ -1,18 +1,14 @@
 class HelixPage(private var ctx: org.w3c.dom.CanvasRenderingContext2D) {
-    var particles : Array<Animatable?> = arrayOfNulls(20)
+    var particles : Array<Animatable?> = arrayOfNulls((ctx.canvas.width*ctx.canvas.height)/160000+1)
     init {
         populateParticles()
         animate()
     }
     fun animate(){
-        darken(ctx.canvas.width,ctx.canvas.height,ctx,1)
+        ctx.darken(1)
         particles.filterNotNull().forEach { it.draw(ctx); it.update() }
         populateParticles()
         kotlin.browser.window.requestAnimationFrame { animate() }
-    }
-
-    fun darken(width:Int, height:Int, ctx : org.w3c.dom.CanvasRenderingContext2D, amount:Int){
-        js("var lastImage = ctx.getImageData(0,0,width,height);var pixelData = lastImage.data;var i;for (i=3; i<pixelData.length; i += 4) { pixelData[i] -= amount; }ctx.putImageData(lastImage,0,0);")
     }
 
     private fun populateParticles(){
