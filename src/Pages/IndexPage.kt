@@ -1,3 +1,8 @@
+package Pages
+
+import Elements.Clickable
+import Elements.Images.GreyoutIcon
+import Elements.Text.MultilineLoopingPulsingText
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLImageElement
 import org.w3c.dom.HTMLParagraphElement
@@ -7,20 +12,24 @@ import kotlin.browser.document
 import kotlin.browser.window
 
 class IndexPage(val ctx: CanvasRenderingContext2D) {
+
+    val fadeFrames = 30
     val socialDim = 64.0
     val padding = 5.0
     val centerX = ctx.canvas.width/2.0
     val socialX =  (centerX-socialDim/2)-(socialDim/2) // -(socialDim/2) if there is an even number of socials
     val socialY = ctx.canvas.height - socialDim - padding
-    val facebook = GreyoutIcon(document.getElementById("facebook") as HTMLImageElement, socialX+-1*(padding+socialDim) ,socialY,socialDim,socialDim,15,{ window.location.href = "http://www.facebook.com/alex.holberg.94"})
-    val twitter = GreyoutIcon(document.getElementById("twitter") as HTMLImageElement, socialX,socialY,socialDim,socialDim,15,{ window.location.href = "https://twitter.com/Ximias"})
-    val git = GreyoutIcon(document.getElementById("git") as HTMLImageElement, socialX+(padding+socialDim),socialY,socialDim,socialDim,15,{ window.location.href = "https://github.com/aalleexxx5"})
-    val mail = GreyoutIcon(document.getElementById("gmail") as HTMLImageElement, socialX+2*(padding+socialDim),socialY,socialDim,socialDim,15,{ window.location.href = "mailto:alexx4387@gmail.com"})
-    val ximias = GreyoutIcon(document.getElementById("ximias") as HTMLImageElement, centerX-128,ctx.canvas.height/2-128.0,256.0,256.0,15,{})
+    val facebook = GreyoutIcon(document.getElementById("facebook") as HTMLImageElement, socialX + -1 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "http://www.facebook.com/alex.holberg.94" })
+    val twitter = GreyoutIcon(document.getElementById("twitter") as HTMLImageElement, socialX, socialY, socialDim, socialDim, fadeFrames, { window.location.href = "https://twitter.com/Ximias" })
+    val git = GreyoutIcon(document.getElementById("git") as HTMLImageElement, socialX + (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "https://github.com/aalleexxx5" })
+    val mail = GreyoutIcon(document.getElementById("gmail") as HTMLImageElement, socialX + 2 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "mailto:alexx4387@gmail.com" })
+    val ximias = GreyoutIcon(document.getElementById("ximias") as HTMLImageElement, centerX - 128, ctx.canvas.height / 2 - 128.0, 256.0, 256.0, fadeFrames, {})
 
-    val quotes = MultilineGlowingText(document.getElementById("inspiration") as HTMLParagraphElement,"18px verdana sans-serif", "#F48A00", 15,80,centerX,120.0,true).fitToWidth(ctx,(ctx.canvas.width/1.5).toInt())
+    val quotes = MultilineLoopingPulsingText(document.getElementById("inspiration") as HTMLParagraphElement, 100, "80px verdana", "#F48A00", 800, centerX, 85.0, true, 150).fitToWidth(ctx,if(ctx.canvas.width>ctx.canvas.height) (ctx.canvas.width/2) else ctx.canvas.width)
     var mouseElements = listOf<Clickable>(facebook, twitter, git, mail, ximias)
     var mouseUpdateElements : List<Clickable> = emptyList()
+    val background = HelixPage(ctx)
+
     init {
         animate()
         document.addEventListener("mousemove",{event -> mouseMove(event)})
@@ -28,7 +37,8 @@ class IndexPage(val ctx: CanvasRenderingContext2D) {
     }
 
     private fun animate() {
-        ctx.darken(1)
+        ctx.darken(2)
+        background.animate()
         quotes.draw(ctx)
         quotes.update()
         mouseElements.forEach { it.draw(ctx) }

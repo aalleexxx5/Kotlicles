@@ -1,3 +1,7 @@
+package Elements.Particles
+
+import Elements.Animatable
+import Elements.Drawable
 import org.w3c.dom.CanvasRenderingContext2D
 
 /**

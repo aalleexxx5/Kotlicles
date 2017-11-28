@@ -1,12 +1,17 @@
+package Elements.Text
+
+import Elements.Animatable
+import Pages.adjustForFrameRate
 import org.w3c.dom.CanvasRenderingContext2D
+import kotlin.js.Math
 
 open class HTMLTypingElement(val name:String, private val action : (() -> Unit), val font:String, val framesPrChar : Double, val locationX : Double, val locationY : Double, var color : String = "#000", val textElements: List<TextElement> = emptyList()) : Animatable, TextElement {
     constructor(name: String, action: () -> Unit, visualParameters: VisualParameters, singleLines: List<TextElement> = emptyList()) : this(name, action, visualParameters.font, visualParameters.framesPrChar, visualParameters.startingLocationX, visualParameters.startingLocationY, visualParameters.color, singleLines)
 
-    val beginTag = TypingSingleLineText("<"+name+">",font, framesPrChar, 0.0, 0.0, false, color)
+    val beginTag = TypingSingleLineText("<" + name + ">", font, framesPrChar, 0.0, 0.0, false, color)
     var wait = 0
     var currentElement = 0
-    val WAIT_PR_ELEMENT = 50
+    val WAIT_PR_ELEMENT = Math.floor(adjustForFrameRate(80.0))
     var hasActionBeenInvoked = false
     override fun update() {
         if (wait>0){

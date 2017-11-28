@@ -1,7 +1,12 @@
+package Elements.Particles
+
+import Elements.Animatable
+import Elements.Drawable
+import Pages.adjustForFrameRate
 import org.w3c.dom.CanvasRenderingContext2D
 import kotlin.js.Math
 
-class Particle(var dynamics : Dynamics, var radius : Double) : Drawable, Animatable{
+class Particle(var dynamics : Dynamics, var radius : Double) : Drawable, Animatable {
     override fun isOutOfBounds(width: Int, height: Int): Boolean {
         return dynamics.x<0-radius || dynamics.y<0-radius || dynamics.x>width+radius || dynamics.y > height-radius
     }
@@ -29,10 +34,16 @@ class Particle(var dynamics : Dynamics, var radius : Double) : Drawable, Animata
 }
 
 data class Dynamics(var x : Double, var y : Double, var r : Double = 0.0, var dx : Double, var dy : Double, var dr : Double = 0.0){
+    init {
+        dx = adjustForFrameRate(dx)
+        dy = adjustForFrameRate(dy)
+        dr = adjustForFrameRate(dr)
+    }
+
     fun update() {
-        x+=dx;
-        y+=dy;
-        r+=dr;
+        x+=dx
+        y+=dy
+        r+=dr
     }
 
     fun asArray() = arrayOf(doubleArrayOf(x,y,r), doubleArrayOf(dx,dy,dr))

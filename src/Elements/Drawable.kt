@@ -1,3 +1,5 @@
+package Elements
+
 import org.w3c.dom.CanvasRenderingContext2D
 
 interface Drawable {

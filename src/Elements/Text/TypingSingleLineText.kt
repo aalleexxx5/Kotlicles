@@ -1,3 +1,6 @@
+package Elements.Text
+
+import Elements.Animatable
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLParagraphElement
 
@@ -20,7 +23,7 @@ class TypingSingleLineText(text : String, font:String, framesPrChar : Double, lo
         ctx.translate(locationX, locationY)
         ctx.fillStyle = color
         ctx.font = font
-        ctx.fillText(text.substring(0,currentFrame/fadeInTime),0.0,0.0)
+        ctx.fillText(text.substring(0,(currentFrame/fadeInTime).toInt()),0.0,0.0)
         ctx.restore()
     }
 }

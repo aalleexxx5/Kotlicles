@@ -1,5 +1,8 @@
+package Elements.Particles
+
+import Elements.Animatable
+import Elements.Drawable
 import org.w3c.dom.CanvasRenderingContext2D
-import kotlin.js.Math
 
 /**
  * Created by Alex on 22/11/2017.

@@ -1,8 +1,10 @@
+package Elements.Text
+
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLParagraphElement
 
 class MultilineGlowingText(text : HTMLParagraphElement, var font:String, var color: String, var fadeInTime : Int, lineTime : Int, var locationX : Double, val locationY: Double, val centered : Boolean): MultilineText(lineTime) {
-    override val lines = text.innerText.split("\n").filterNot { it.isEmpty() }.mapIndexed { index, s ->  GlowingSingleLineText(s,font, color, fadeInTime, locationX, locationY, centered)}
+    override val lines = text.innerText.split("\n").filterNot { it.isEmpty() }.mapIndexed { index, s -> GlowingSingleLineText(s, font, color, fadeInTime, locationX, locationY, centered) }
 
     override fun draw(ctx: CanvasRenderingContext2D) {
         ctx.save()

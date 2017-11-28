@@ -1,3 +1,8 @@
+package Elements.Images
+
+import Elements.Animatable
+import Elements.Particles.Dynamics
+import Pages.adjustForFrameRate
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLImageElement
 import kotlin.browser.document
@@ -5,13 +10,13 @@ import kotlin.js.Math
 
 class AppearingImage(val dynamics: Dynamics, val image : HTMLImageElement, val appearX : Double, val appearY : Double) : Animatable {
 
-    constructor(dynamics: Dynamics,src : String, appearX: Double, appearY: Double) : this(dynamics, document.createElement("img") as HTMLImageElement,appearX,appearY){
+    constructor(dynamics: Dynamics, src : String, appearX: Double, appearY: Double) : this(dynamics, document.createElement("img") as HTMLImageElement,appearX,appearY){
         image.setAttribute("src", src)
     }
 
-    constructor(image: HTMLImageElement, appearX: Double, appearY: Double, speed : Double) : this(Dynamics(image.width.toDouble(), 0.0,0.0,0.0,speed,0.0),image,appearX-image.width/2, appearY)
+    constructor(image: HTMLImageElement, appearX: Double, appearY: Double, speed : Double) : this(Dynamics(image.width.toDouble(), 0.0, 0.0, 0.0, speed, 0.0),image,appearX-image.width/2, appearY)
 
-    constructor(image: HTMLImageElement, appearX: Double, appearY: Double, width: Int, height: Int, percentagePrFrame: Double) : this(Dynamics(width.toDouble(), 0.0,0.0,0.0, percentagePrFrame *(height/100),0.0),image,appearX-width/2, appearY){
+    constructor(image: HTMLImageElement, appearX: Double, appearY: Double, width: Int, height: Int, percentagePrFrame: Double) : this(Dynamics(width.toDouble(), 0.0, 0.0, 0.0, percentagePrFrame * (height / adjustForFrameRate(100.0)), 0.0),image,appearX-width/2, appearY){
         this.image.width = width
         this.image.height = height
     }

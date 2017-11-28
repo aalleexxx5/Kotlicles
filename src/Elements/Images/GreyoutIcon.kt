@@ -1,20 +1,28 @@
+package Elements.Images
+
+import Elements.Clickable
+import Pages.adjustForFrameRate
 import org.w3c.dom.*
 import kotlin.browser.document
+import kotlin.js.Math
 
-class GreyoutIcon(val image : HTMLImageElement,var locationX : Double,var locationY : Double, val width : Double, val height : Double,val fadeFrames : Int,val onClick : () -> Unit) : Clickable{
-    var step = fadeFrames
+class GreyoutIcon(val image : HTMLImageElement,var locationX : Double,var locationY : Double, val width : Double, val height : Double,fadeFrames : Int,val onClick : () -> Unit) : Clickable {
+    val fadeFrames = Math.ceil(adjustForFrameRate(fadeFrames.toDouble()))
+    var step = this.fadeFrames
     val greyImage : ImageData
+    val greyCanvas = document.createElement("canvas") as HTMLCanvasElement
+
     init {
-        val greyCanvas = document.createElement("canvas") as HTMLCanvasElement
         greyCanvas.width = width.toInt()
         greyCanvas.height = height.toInt()
         val ctx = greyCanvas.getContext("2d") as CanvasRenderingContext2D
+        ctx.clearRect(0.0,0.0,width, height)
         ctx.drawImage(image,0.0,0.0,image.naturalWidth.toDouble(), image.naturalHeight.toDouble(), 0.0,0.0,width, height)
         var imageData = ctx.getImageData(0.0,0.0,width, height)
         js("""var data = imageData.data;
 
         for(var i = 0; i < data.length; i += 4) {
-          var brightness = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
+          var brightness = (0.30 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2])*0.05;
           // red
           data[i] = brightness;
           // green
@@ -22,6 +30,7 @@ class GreyoutIcon(val image : HTMLImageElement,var locationX : Double,var locati
           // blue
           data[i + 2] = brightness;
         }""")
+        ctx.putImageData(imageData,0.0,0.0)
         greyImage = imageData
 
     }
@@ -34,7 +43,7 @@ class GreyoutIcon(val image : HTMLImageElement,var locationX : Double,var locati
 
     override fun onMouseOverUpdate(ctx: CanvasRenderingContext2D) {
         if (step>0){
-            step -= 2
+            step -=2
         }
     }
 
@@ -44,12 +53,14 @@ class GreyoutIcon(val image : HTMLImageElement,var locationX : Double,var locati
 
     override fun draw(ctx: CanvasRenderingContext2D) {
         ctx.save()
-        ctx.putImageData(greyImage, locationX, locationY)
+        ctx.globalCompositeOperation = "source-over"
+        ctx.drawImage(greyCanvas, locationX, locationY)
+        //ctx.putImageData(greyImage, locationX, locationY)
         if (step<fadeFrames){
             step++
-
             ctx.globalAlpha = ((fadeFrames-step)*(1/fadeFrames.toDouble()))
             ctx.drawImage(image,0.0,0.0,image.naturalWidth.toDouble(),image.naturalHeight.toDouble(),locationX, locationY, width,height)
+            if (step ==0) step++
         }
         ctx.restore()
     }

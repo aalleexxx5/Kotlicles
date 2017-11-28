@@ -1,8 +1,13 @@
+package Elements.Text
+
+import Elements.Animatable
+import Pages.adjustForFrameRate
 import org.w3c.dom.CanvasRenderingContext2D
+import kotlin.js.Math
 
-abstract class MultilineText(var lineTime: Int) : Animatable, TextElement {
+abstract class MultilineText(lineTime: Int) : Animatable, TextElement {
     protected abstract val lines: List<SingleLineText>
-
+    val lineTime = Math.ceil(adjustForFrameRate( lineTime.toDouble()))
     protected var wait = 0
     protected var currentLine = 0
 
@@ -18,7 +23,6 @@ abstract class MultilineText(var lineTime: Int) : Animatable, TextElement {
                 }
             }
         }
-
     }
 
     override fun isOutOfBounds(width: Int, height: Int): Boolean = lines.last().isOutOfBounds(0, 0) && wait <= 1

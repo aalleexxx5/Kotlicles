@@ -1,7 +1,11 @@
+package Elements.Text
+
+import Elements.Animatable
+import Pages.adjustForFrameRate
 import org.w3c.dom.CanvasRenderingContext2D
 
-abstract class SingleLineText(val text : String, var font:String, var color: String, var fadeInTime : Int, var locationX : Double, val locationY: Double, val centered : Boolean) :Animatable, TextElement{
-
+abstract class SingleLineText(val text : String, var font:String, var color: String, fadeInTime : Int, var locationX : Double, val locationY: Double, val centered : Boolean) : Animatable, TextElement {
+    var fadeInTime = adjustForFrameRate(fadeInTime.toDouble())
     override fun getHeight(): Double = font.substring(0,font.indexOf("p")).toDouble()
 
     var currentFrame = 0
