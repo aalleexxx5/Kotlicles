@@ -35,9 +35,10 @@ class Particle(var dynamics : Dynamics, var radius : Double) : Drawable, Animata
 
 data class Dynamics(var x : Double, var y : Double, var r : Double = 0.0, var dx : Double, var dy : Double, var dr : Double = 0.0){
     init {
-        dx = adjustForFrameRate(dx)
-        dy = adjustForFrameRate(dy)
-        dr = adjustForFrameRate(dr)
+        val adj = adjustForFrameRate(1.0)
+        dx /= adj
+        dy /= adj
+        dr /= adj
     }
 
     fun update() {

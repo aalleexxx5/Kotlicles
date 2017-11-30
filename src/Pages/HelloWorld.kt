@@ -32,12 +32,12 @@ class Page(val ctx: CanvasRenderingContext2D) {
             image.update()
             window.requestAnimationFrame { animateExclamationMark() }
         } else {
-            if (frameCount > FADE_TIME / 5) {
+            if (frameCount > FADE_TIME / 4) {
                 frameCount = 0
                 window.requestAnimationFrame { animateIntro() }
             } else {
                 frameCount++
-                ctx.darkenAdjusted(5)
+                ctx.darkenAdjusted(4)
                 window.requestAnimationFrame { animateExclamationMark() }
             }
         }
@@ -76,12 +76,24 @@ fun main(args: Array<String>) {
 
 var FADE_TIME = 255
 fun CanvasRenderingContext2D.darkenAdjusted(amount: Int) {
-    val adjAmount = Math.ceil(amount*60/fps)
+    val adjAmount = Math.ceil(amount*60/fps.toInt())
     val ctx = this
     val width: Int = this.canvas.width
     val height: Int = this.canvas.height
-    js("var lastImage = ctx.getImageData(0,0,width,height);var pixelData = lastImage.data;var i;for (i=3; i<pixelData.length; i += 4) { pixelData[i] -= adjAmount; }ctx.putImageData(lastImage,0,0);")
+    js("""
+        var lastImage = ctx.getImageData(0,0,width,height);
+        var pixelData = lastImage.data;
+        var i;
+        var len = pixelData.length;
+        for (i=3; i<len; i += 4) {
+            pixelData[i] -= adjAmount;
+        }
+        ctx.putImageData(lastImage,0,0);
+""")
 }
+
+
+
 fun CanvasRenderingContext2D.darken(amount: Int) {
     val ctx = this
     val width: Int = this.canvas.width
@@ -96,18 +108,18 @@ fun CanvasRenderingContext2D.whiteFrame() {
 var frameCalCount = 0
 
 var startTime = Date()
-var fps = 60
+var fps = 60.0
 
 fun frameRateCalculator(ctx: CanvasRenderingContext2D) {
 
     frameCalCount++
     ctx.darkenAdjusted(3)
-    fps = 1000/((Date().getTime() - startTime.getTime())/frameCalCount).toInt()
+    fps = 1000/((Date().getTime() - startTime.getTime())/frameCalCount)
     if (frameCalCount%10 ==0) println("fps: "+fps)
     if (frameCalCount< 50) {
         window.requestAnimationFrame { frameRateCalculator(ctx) }
     }else{
-        Page(ctx)
+        IndexPage(ctx)
     }
 }
 fun adjustForFrameRate(framesIn60: Double) = framesIn60 * (fps/60.0)

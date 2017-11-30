@@ -16,7 +16,7 @@ class AppearingImage(val dynamics: Dynamics, val image : HTMLImageElement, val a
 
     constructor(image: HTMLImageElement, appearX: Double, appearY: Double, speed : Double) : this(Dynamics(image.width.toDouble(), 0.0, 0.0, 0.0, speed, 0.0),image,appearX-image.width/2, appearY)
 
-    constructor(image: HTMLImageElement, appearX: Double, appearY: Double, width: Int, height: Int, percentagePrFrame: Double) : this(Dynamics(width.toDouble(), 0.0, 0.0, 0.0, percentagePrFrame * (height / adjustForFrameRate(100.0)), 0.0),image,appearX-width/2, appearY){
+    constructor(image: HTMLImageElement, appearX: Double, appearY: Double, width: Int, height: Int, percentagePrFrame: Double) : this(Dynamics(width.toDouble(), 0.0, 0.0, 0.0, percentagePrFrame * (height / 100.0), 0.0),image,appearX-width/2, appearY){
         this.image.width = width
         this.image.height = height
     }

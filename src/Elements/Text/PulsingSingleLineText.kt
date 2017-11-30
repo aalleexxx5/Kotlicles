@@ -11,9 +11,13 @@ class PulsingSingleLineText(text: String, font: String, color: String, fadeInTim
     override fun draw(ctx: CanvasRenderingContext2D) {
         ctx.save()
         ctx.font = font
-        ctx.fillStyle = "#000"
+        if (getHeight()>15){
+            ctx.fillStyle = "#000"
             ctx.shadowColor = color
             ctx.shadowBlur = getHeight()/Math.abs((currentFrame%(pulseLength*2))-pulseLength.toDouble())
+        }else{
+            ctx.fillStyle = color
+        }
         if (centered) ctx.textAlign = CanvasTextAlign.CENTER else ctx.textAlign = CanvasTextAlign.RIGHT
         ctx.translate(locationX, locationY)
         ctx.fillText(text,0.0,0.0)

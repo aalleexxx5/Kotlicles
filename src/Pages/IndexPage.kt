@@ -25,7 +25,7 @@ class IndexPage(val ctx: CanvasRenderingContext2D) {
     val mail = GreyoutIcon(document.getElementById("gmail") as HTMLImageElement, socialX + 2 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "mailto:alexx4387@gmail.com" })
     val ximias = GreyoutIcon(document.getElementById("ximias") as HTMLImageElement, centerX - 128, ctx.canvas.height / 2 - 128.0, 256.0, 256.0, fadeFrames, {})
 
-    val quotes = MultilineLoopingPulsingText(document.getElementById("inspiration") as HTMLParagraphElement, 100, "80px verdana", "#F48A00", 800, centerX, 85.0, true, 150).fitToWidth(ctx,if(ctx.canvas.width>ctx.canvas.height) (ctx.canvas.width/2) else ctx.canvas.width)
+    val quotes = MultilineLoopingPulsingText(document.getElementById("inspiration") as HTMLParagraphElement, FADE_TIME, "80px verdana", "#F48A00", 800, centerX, 85.0, true, 150).fitToWidth(ctx,if(ctx.canvas.width>ctx.canvas.height) (ctx.canvas.width/2) else ctx.canvas.width)
     var mouseElements = listOf<Clickable>(facebook, twitter, git, mail, ximias)
     var mouseUpdateElements : List<Clickable> = emptyList()
     val background = HelixPage(ctx)
@@ -37,7 +37,7 @@ class IndexPage(val ctx: CanvasRenderingContext2D) {
     }
 
     private fun animate() {
-        ctx.darken(2)
+        ctx.darkenAdjusted(1)
         background.animate()
         quotes.draw(ctx)
         quotes.update()

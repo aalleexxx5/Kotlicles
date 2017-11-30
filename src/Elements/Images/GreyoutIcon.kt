@@ -22,7 +22,7 @@ class GreyoutIcon(val image : HTMLImageElement,var locationX : Double,var locati
         js("""var data = imageData.data;
 
         for(var i = 0; i < data.length; i += 4) {
-          var brightness = (0.30 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2])*0.05;
+          var brightness = (0.30 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2])*0.05+0.05;
           // red
           data[i] = brightness;
           // green

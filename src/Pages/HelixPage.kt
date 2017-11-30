@@ -48,9 +48,9 @@ class HelixPage(private var ctx: org.w3c.dom.CanvasRenderingContext2D) {
                         Math.random() * ctx.canvas.width,
                         Math.random() * ctx.canvas.height,
                         Math.random() * 2 * Math.PI,
-                        Math.random() * 2 - 1,
-                        Math.random() * 2 - 1,
-                        Math.random() - 0.5
+                        randomizeWithMinimum(-2.0,2.0,0.2),
+                        randomizeWithMinimum(-2.0,2.0,0.2),
+                        randomizeWithMinimum(-0.5,0.5,0.05)
                 ),
                 20.0)
     }
@@ -60,9 +60,9 @@ class HelixPage(private var ctx: org.w3c.dom.CanvasRenderingContext2D) {
                         Math.random() * ctx.canvas.width,
                         Math.random() * ctx.canvas.height,
                         Math.random() * 2 * Math.PI,
-                        Math.random() * 6 - 3,
-                        Math.random() * 6 - 3,
-                        Math.random() / 1.5 - 0.33
+                        randomizeWithMinimum(-1.0,1.0,0.1),
+                        randomizeWithMinimum(-1.0,1.0,0.1),
+                        randomizeWithMinimum(-0.125,0.125,0.005)
                 ),
                 30.0)
     }
@@ -73,10 +73,22 @@ class HelixPage(private var ctx: org.w3c.dom.CanvasRenderingContext2D) {
                         Math.random() * ctx.canvas.width,
                         Math.random() * ctx.canvas.height,
                         Math.random() * 2 * Math.PI,
-                        Math.random() * 6 - 3,
-                        Math.random() * 6 - 3,
-                        Math.random() / 2 - 0.25
+                        randomizeWithMinimum(-1.0,1.0,0.15),
+                        randomizeWithMinimum(-1.0,1.0,0.15),
+                        randomizeWithMinimum(-0.1,0.1,0.005)
                 ),
                 30.0, 2)
+    }
+
+    fun randomizeWithMinimum(min : Double ,max : Double, lowerValue : Double): Double {
+        var ans = Math.random() * (max+Math.abs(min)) + min
+        if (Math.abs(ans) < lowerValue){
+            if (ans<0){
+                ans-=lowerValue
+            }else{
+                ans+=lowerValue
+            }
+        }
+        return ans
     }
 }
