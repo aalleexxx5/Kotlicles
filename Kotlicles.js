@@ -6,6 +6,7 @@ var Kotlicles = function (_, Kotlin) {
   var Kind_INTERFACE = Kotlin.Kind.INTERFACE;
   var Kind_CLASS = Kotlin.Kind.CLASS;
   var throwCCE = Kotlin.throwCCE;
+  var numberToInt = Kotlin.numberToInt;
   var Unit = Kotlin.kotlin.Unit;
   var first = Kotlin.kotlin.collections.first_us0mfu$;
   var last = Kotlin.kotlin.collections.last_2p1efm$;
@@ -20,8 +21,8 @@ var Kotlicles = function (_, Kotlin) {
   var listOf = Kotlin.kotlin.collections.listOf_mh5how$;
   var listOf_0 = Kotlin.kotlin.collections.listOf_i5x0yv$;
   var filterNotNull = Kotlin.kotlin.collections.filterNotNull_emfgvx$;
-  var toString = Kotlin.toString;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
+  var toString = Kotlin.toString;
   GlowingSingleLineText.prototype = Object.create(SingleLineText.prototype);
   GlowingSingleLineText.prototype.constructor = GlowingSingleLineText;
   MultilineGlowingText.prototype = Object.create(MultilineText.prototype);
@@ -107,8 +108,8 @@ var Kotlicles = function (_, Kotlin) {
     this.greyImage = null;
     var tmp$, tmp$_0;
     this.greyCanvas = Kotlin.isType(tmp$ = document.createElement('canvas'), HTMLCanvasElement) ? tmp$ : throwCCE();
-    this.greyCanvas.width = this.width | 0;
-    this.greyCanvas.height = this.height | 0;
+    this.greyCanvas.width = numberToInt(this.width);
+    this.greyCanvas.height = numberToInt(this.height);
     var ctx = Kotlin.isType(tmp$_0 = this.greyCanvas.getContext('2d'), CanvasRenderingContext2D) ? tmp$_0 : throwCCE();
     ctx.clearRect(0.0, 0.0, this.width, this.height);
     ctx.drawImage(this.image, 0.0, 0.0, this.image.naturalWidth, this.image.naturalHeight, 0.0, 0.0, this.width, this.height);
@@ -191,7 +192,7 @@ var Kotlicles = function (_, Kotlin) {
     interfaces: [Animatable, Drawable]
   };
   function HueColorAnimation() {
-    this.h = Math.random() * 360 | 0;
+    this.h = numberToInt(Math.random() * 360);
     this.s = 100;
     this.l = 50;
   }
@@ -829,7 +830,7 @@ var Kotlicles = function (_, Kotlin) {
   function TypingSingleLineText(text, font, framesPrChar, locationX, locationY, centered, color) {
     if (color === void 0)
       color = '#000';
-    SingleLineText.call(this, text, font, color, framesPrChar | 0, locationX, locationY, centered);
+    SingleLineText.call(this, text, font, color, numberToInt(framesPrChar), locationX, locationY, centered);
   }
   TypingSingleLineText.prototype.isOutOfBounds_vux9f0$ = function (width, height) {
     return this.currentFrame / this.fadeInTime > this.text.length;
@@ -840,7 +841,7 @@ var Kotlicles = function (_, Kotlin) {
     ctx.fillStyle = this.color;
     ctx.font = this.font;
     var $receiver = this.text;
-    var endIndex = this.currentFrame / this.fadeInTime | 0;
+    var endIndex = numberToInt(this.currentFrame / this.fadeInTime);
     ctx.fillText($receiver.substring(0, endIndex), 0.0, 0.0);
     ctx.restore();
   };
@@ -1035,12 +1036,24 @@ var Kotlicles = function (_, Kotlin) {
     simpleName: 'HelixPage',
     interfaces: []
   };
+  var Math_0 = Math;
   function Page(ctx) {
     this.ctx = ctx;
-    var tmp$, tmp$_0;
-    this.image = AppearingImage_init_1(Kotlin.isType(tmp$ = document.getElementById('exclamation'), HTMLImageElement) ? tmp$ : throwCCE(), this.ctx.canvas.width / 2.0, (this.ctx.canvas.height + Math.min(this.ctx.canvas.width * 0.75, this.ctx.canvas.height * 0.75)) / 2, Math.min(this.ctx.canvas.width * 0.75, this.ctx.canvas.height * 0.75) | 0, Math.min(this.ctx.canvas.width * 0.75, this.ctx.canvas.height * 0.75) | 0, -4.0);
+    var tmp$, tmp$_0, tmp$_1, tmp$_2, tmp$_3, tmp$_4;
+    tmp$_0 = Kotlin.isType(tmp$ = document.getElementById('exclamation'), HTMLImageElement) ? tmp$ : throwCCE();
+    tmp$_1 = this.ctx.canvas.width / 2.0;
+    var tmp$_5 = this.ctx.canvas.height;
+    var a = this.ctx.canvas.width * 0.75;
+    var b = this.ctx.canvas.height * 0.75;
+    tmp$_2 = (tmp$_5 + Math_0.min(a, b)) / 2;
+    var a_0 = this.ctx.canvas.width * 0.75;
+    var b_0 = this.ctx.canvas.height * 0.75;
+    tmp$_3 = numberToInt(Math_0.min(a_0, b_0));
+    var a_1 = this.ctx.canvas.width * 0.75;
+    var b_1 = this.ctx.canvas.height * 0.75;
+    this.image = AppearingImage_init_1(tmp$_0, tmp$_1, tmp$_2, tmp$_3, numberToInt(Math_0.min(a_1, b_1)), -4.0);
     this.lineSpace = 5;
-    this.greetingText = MultilineTypingText_init(Kotlin.isType(tmp$_0 = document.getElementById('greeting'), HTMLParagraphElement) ? tmp$_0 : throwCCE(), '16px Serif', 3.0, 25, 1.0, 16.0 + this.lineSpace, false);
+    this.greetingText = MultilineTypingText_init(Kotlin.isType(tmp$_4 = document.getElementById('greeting'), HTMLParagraphElement) ? tmp$_4 : throwCCE(), '16px Serif', 3.0, 25, 1.0, 16.0 + this.lineSpace, false);
     this.frameCount = 0;
     this.animateExclamationMark();
   }
@@ -1125,22 +1138,38 @@ var Kotlicles = function (_, Kotlin) {
     var ctx = Kotlin.isType(tmp$_0 = canvas.getContext('2d'), CanvasRenderingContext2D) ? tmp$_0 : throwCCE();
     ctx.globalCompositeOperation = 'source-over';
     frameRateCalculator(ctx);
-    FADE_TIME = Math.ceil(adjustForFrameRate(255.0));
+    var x = adjustForFrameRate(255.0);
+    FADE_TIME = numberToInt(Math_0.ceil(x));
   }
   var FADE_TIME;
   function darkenAdjusted($receiver, amount) {
-    var adjAmount = Math.ceil((amount * 60 | 0) / (fps | 0) | 0);
+    var tmp$;
+    var x = (amount * 60 | 0) / fps;
+    var adjAmount = numberToInt(Math_0.ceil(x));
     var ctx = $receiver;
     var width = $receiver.canvas.width;
     var height = $receiver.canvas.height;
-    var lastImage = ctx.getImageData(0, 0, width, height);
-    var pixelData = lastImage.data;
-    var i;
-    var len = pixelData.length;
-    for (i = 3; i < len; i += 4) {
-      pixelData[i] -= adjAmount;
+    var image = ctx.getImageData(0.0, 0.0, width, height);
+    var data = image.data;
+    var buf = new ArrayBuffer(data.length);
+    var buf8 = new Uint8ClampedArray(buf);
+    var data32 = new Uint32Array(buf);
+    tmp$ = data32.length;
+    for (var i = 0; i < tmp$; i++) {
+      var a = (data32[i] >>> 24) - adjAmount | 0;
+      if (a !== 0) {
+        println(data32[i]);
+        if (a < 0) {
+          data32[i] = 0;
+        }
+         else {
+          println('yep' + toString(a << 24));
+          data32[i] = a << 24;
+        }
+      }
     }
-    ctx.putImageData(lastImage, 0, 0);
+    image.data.set(buf8);
+    ctx.putImageData(image, 0.0, 0.0);
   }
   function darken($receiver, amount) {
     var ctx = $receiver;
@@ -1197,7 +1226,7 @@ var Kotlicles = function (_, Kotlin) {
     this.git = new GreyoutIcon(Kotlin.isType(tmp$_1 = document.getElementById('git'), HTMLImageElement) ? tmp$_1 : throwCCE(), this.socialX + (this.padding + this.socialDim), this.socialY, this.socialDim, this.socialDim, this.fadeFrames, IndexPage$git$lambda);
     this.mail = new GreyoutIcon(Kotlin.isType(tmp$_2 = document.getElementById('gmail'), HTMLImageElement) ? tmp$_2 : throwCCE(), this.socialX + 2 * (this.padding + this.socialDim), this.socialY, this.socialDim, this.socialDim, this.fadeFrames, IndexPage$mail$lambda);
     this.ximias = new GreyoutIcon(Kotlin.isType(tmp$_3 = document.getElementById('ximias'), HTMLImageElement) ? tmp$_3 : throwCCE(), this.centerX - 128, (this.ctx.canvas.height / 2 | 0) - 128.0, 256.0, 256.0, this.fadeFrames, IndexPage$ximias$lambda);
-    this.quotes = (new MultilineLoopingPulsingText(Kotlin.isType(tmp$_4 = document.getElementById('inspiration'), HTMLParagraphElement) ? tmp$_4 : throwCCE(), 100, '80px verdana', '#F48A00', 800, this.centerX, 85.0, true, 150)).fitToWidth_ggs6sk$(this.ctx, this.ctx.canvas.width > this.ctx.canvas.height ? this.ctx.canvas.width / 2 | 0 : this.ctx.canvas.width);
+    this.quotes = (new MultilineLoopingPulsingText(Kotlin.isType(tmp$_4 = document.getElementById('inspiration'), HTMLParagraphElement) ? tmp$_4 : throwCCE(), FADE_TIME, '80px verdana', '#F48A00', 800, this.centerX, 85.0, true, 150)).fitToWidth_ggs6sk$(this.ctx, this.ctx.canvas.width > this.ctx.canvas.height ? this.ctx.canvas.width / 2 | 0 : this.ctx.canvas.width);
     this.mouseElements = listOf_0([this.facebook, this.twitter, this.git, this.mail, this.ximias]);
     this.mouseUpdateElements = emptyList();
     this.background = new HelixPage(this.ctx);
@@ -1212,7 +1241,7 @@ var Kotlicles = function (_, Kotlin) {
     };
   }
   IndexPage.prototype.animate_0 = function () {
-    darkenAdjusted(this.ctx, 2);
+    darkenAdjusted(this.ctx, 1);
     this.background.animate();
     this.quotes.draw_f69bme$(this.ctx);
     this.quotes.update();
@@ -1304,8 +1333,8 @@ var Kotlicles = function (_, Kotlin) {
   function KotlinPage(ctx) {
     this.ctx = ctx;
     var tmp$, tmp$_0;
-    this.bulb = AppearingImage_init_1(Kotlin.isType(tmp$ = document.getElementById('light'), HTMLImageElement) ? tmp$ : throwCCE(), this.ctx.canvas.width / 2.0, (this.ctx.canvas.height + Math.min(this.ctx.canvas.width * 0.75, this.ctx.canvas.height * 0.75)) / 2, Math.min(this.ctx.canvas.width * 0.75, this.ctx.canvas.height * 0.75) | 0, Math.min(this.ctx.canvas.width * 0.75, this.ctx.canvas.height * 0.75) | 0, -3.0);
-    this.idea = (new MultilineGlowingText(Kotlin.isType(tmp$_0 = document.getElementById('idea'), HTMLParagraphElement) ? tmp$_0 : throwCCE(), '100px sans-serif', '#FF6', 10, 120, this.ctx.canvas.width / 2.0, this.ctx.canvas.height / 2.0, true)).fitToWidth_ggs6sk$(this.ctx, this.ctx.canvas.width / 1.5 | 0);
+    this.bulb = AppearingImage_init_1(Kotlin.isType(tmp$ = document.getElementById('light'), HTMLImageElement) ? tmp$ : throwCCE(), this.ctx.canvas.width / 2.0, (this.ctx.canvas.height + Math.min(this.ctx.canvas.width * 0.75, this.ctx.canvas.height * 0.75)) / 2, numberToInt(Math.min(this.ctx.canvas.width * 0.75, this.ctx.canvas.height * 0.75)), numberToInt(Math.min(this.ctx.canvas.width * 0.75, this.ctx.canvas.height * 0.75)), -3.0);
+    this.idea = (new MultilineGlowingText(Kotlin.isType(tmp$_0 = document.getElementById('idea'), HTMLParagraphElement) ? tmp$_0 : throwCCE(), '100px sans-serif', '#FF6', 10, 120, this.ctx.canvas.width / 2.0, this.ctx.canvas.height / 2.0, true)).fitToWidth_ggs6sk$(this.ctx, numberToInt(this.ctx.canvas.width / 1.5));
     this.wait = FADE_TIME;
     this.animateBulb();
   }
