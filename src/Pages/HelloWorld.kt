@@ -123,7 +123,12 @@ fun frameRateCalculator(ctx: CanvasRenderingContext2D) {
     if (frameCalCount< 50) {
         window.requestAnimationFrame { frameRateCalculator(ctx) }
     }else{
-        IndexPage(ctx)
+        if (document.URL.endsWith("#skip")){
+            document.body?.style?.background = "#000"
+            IndexPage(ctx)
+        }else{
+            Page(ctx)
+        }
     }
 }
 fun adjustForFrameRate(framesIn60: Double) = framesIn60 * (fps/60.0)
