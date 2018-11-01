@@ -6,7 +6,7 @@ import Pages.adjustForFrameRate
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLImageElement
 import kotlin.browser.document
-import kotlin.js.Math
+import kotlin.math.abs
 
 class AppearingImage(val dynamics: Dynamics, val image : HTMLImageElement, val appearX : Double, val appearY : Double) : Animatable {
 
@@ -31,19 +31,19 @@ class AppearingImage(val dynamics: Dynamics, val image : HTMLImageElement, val a
     }
 
     override fun isOutOfBounds(width: Int, height: Int): Boolean {
-        return Math.abs(dynamics.x)>image.width || Math.abs(dynamics.y)>image.height
+        return abs(dynamics.x)>image.width || abs(dynamics.y)>image.height
     }
 
     override fun draw(ctx: CanvasRenderingContext2D) {
         //from dynamics x and y to appearX and Y
         // Assume image is moving up in a straight line
 
-        //ctx.drawImage(image,appearX+dynamics.x,appearY+dynamics.y,Math.abs(dynamics.x),Math.abs(dynamics.y))
+        //ctx.drawImage(image,appearX+dynamics.x,appearY+dynamics.y,abs(dynamics.x),abs(dynamics.y))
         ctx.drawImage(image,
                 if(dynamics.dx <= 0) 0.0 else image.width-dynamics.x ,if(dynamics.dy <= 0) 0.0 else image.height-dynamics.y,
-                Math.abs(dynamics.x)*image.naturalWidth/image.width,Math.abs(dynamics.y)*image.naturalHeight/image.height,
+                abs(dynamics.x)*image.naturalWidth/image.width,abs(dynamics.y)*image.naturalHeight/image.height,
                 if (dynamics.dx >= 0) appearX else appearX+dynamics.x,if (dynamics.dy >= 0) appearY else appearY+dynamics.y,
-                Math.abs(dynamics.x),Math.abs(dynamics.y))
+                abs(dynamics.x),abs(dynamics.y))
 
     }
 

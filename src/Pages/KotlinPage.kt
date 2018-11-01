@@ -7,10 +7,10 @@ import org.w3c.dom.HTMLImageElement
 import org.w3c.dom.HTMLParagraphElement
 import kotlin.browser.document
 import kotlin.browser.window
-import kotlin.js.Math
+import kotlin.math.min
 
 class KotlinPage(val ctx : CanvasRenderingContext2D) {
-    val bulb = AppearingImage(document.getElementById("light") as HTMLImageElement, ctx.canvas.width / 2.0, (ctx.canvas.height + Math.min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75)) / 2, Math.min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75).toInt(), Math.min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75).toInt(), -3.0)
+    val bulb = AppearingImage(document.getElementById("light") as HTMLImageElement, ctx.canvas.width / 2.0, (ctx.canvas.height + min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75)) / 2, min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75).toInt(), min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75).toInt(), -3.0)
     val idea = MultilineGlowingText(document.getElementById("idea") as HTMLParagraphElement, "100px sans-serif", "#FF6", 10, 120, ctx.canvas.width / 2.0, ctx.canvas.height / 2.0, true).fitToWidth(ctx, (ctx.canvas.width/1.5).toInt())
 
 

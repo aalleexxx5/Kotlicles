@@ -3,11 +3,11 @@ package Elements.Text
 import Elements.Animatable
 import Pages.adjustForFrameRate
 import org.w3c.dom.CanvasRenderingContext2D
-import kotlin.js.Math
+import kotlin.math.ceil
 
 abstract class MultilineText(lineTime: Int) : Animatable, TextElement {
     protected abstract val lines: List<SingleLineText>
-    val lineTime = Math.ceil(adjustForFrameRate( lineTime.toDouble()))
+    val lineTime = ceil(adjustForFrameRate( lineTime.toDouble())).toInt()
     protected var wait = 0
     protected var currentLine = 0
 

@@ -4,7 +4,7 @@ import Elements.Animatable
 import Elements.Drawable
 import Pages.adjustForFrameRate
 import org.w3c.dom.CanvasRenderingContext2D
-import kotlin.js.Math
+import kotlin.math.PI
 
 class Particle(var dynamics : Dynamics, var radius : Double) : Drawable, Animatable {
     override fun isOutOfBounds(width: Int, height: Int): Boolean {
@@ -21,7 +21,7 @@ class Particle(var dynamics : Dynamics, var radius : Double) : Drawable, Animata
         grad.addColorStop(0.2,"#000")
         ctx.fillStyle = grad
         ctx.rotate(dynamics.r)
-        ctx.arc(0.0,0.0,radius, 0.0, 2*Math.PI)
+        ctx.arc(0.0,0.0,radius, 0.0, 2*PI)
         ctx.fill()
         ctx.restore()
         //ctx.arc(95.0,50.0,40.0,0.0,5.5)

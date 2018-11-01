@@ -4,10 +4,10 @@ import Elements.Clickable
 import Pages.adjustForFrameRate
 import org.w3c.dom.*
 import kotlin.browser.document
-import kotlin.js.Math
+import kotlin.math.ceil
 
 class GreyoutIcon(val image : HTMLImageElement,var locationX : Double,var locationY : Double, val width : Double, val height : Double,fadeFrames : Int,val onClick : () -> Unit) : Clickable {
-    val fadeFrames = Math.ceil(adjustForFrameRate(fadeFrames.toDouble()))
+    val fadeFrames = ceil(adjustForFrameRate(fadeFrames.toDouble())).toInt()
     var step = this.fadeFrames
     val greyImage : ImageData
     val greyCanvas = document.createElement("canvas") as HTMLCanvasElement

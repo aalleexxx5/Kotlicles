@@ -5,6 +5,7 @@ import Elements.Particles.Dynamics
 import Elements.Particles.LineHelix
 import Elements.Particles.NHelix
 import Elements.Particles.Particle
+import org.w3c.dom.Range
 import kotlin.js.Math
 
 class HelixPage(private var ctx: org.w3c.dom.CanvasRenderingContext2D) {
