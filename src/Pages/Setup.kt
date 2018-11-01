@@ -11,59 +11,8 @@ import kotlin.*
 import kotlin.math.ceil
 import kotlin.math.min
 
-class Page(val ctx: CanvasRenderingContext2D) {
-    val image = AppearingImage(
-            document.getElementById("exclamation") as HTMLImageElement,
-            ctx.canvas.width / 2.0, (ctx.canvas.height + min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75)) / 2, min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75).toInt(), min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75).toInt(), -3.0
-    )
-    val lineSpace = 5
-    val greetingText = MultilineTypingText(document.getElementById("greeting") as HTMLParagraphElement, "16px Serif", 5.0, 30, 1.0, 16.0 + lineSpace, false)
 
-    var frameCount = 0
-
-    init {
-        animateExclamationMark()
-    }
-
-    fun animateExclamationMark() {
-        if (!image.isOutOfBounds(0, 0)) {
-            ctx.whiteFrame()
-            image.draw(ctx)
-            image.update()
-            window.requestAnimationFrame { animateExclamationMark() }
-        } else {
-            if (frameCount > FADE_TIME / 4) {
-                frameCount = 0
-                window.requestAnimationFrame { animateIntro() }
-            } else {
-                frameCount++
-                ctx.darkenAdjusted(4)
-                window.requestAnimationFrame { animateExclamationMark() }
-            }
-        }
-    }
-
-
-    fun animateIntro() {
-        if (!greetingText.isOutOfBounds(0, 0)) {
-            ctx.whiteFrame()
-            greetingText.draw(ctx)
-            greetingText.update()
-            window.requestAnimationFrame { animateIntro() }
-        } else {
-            if (frameCount <= FADE_TIME / 3) {
-                frameCount++
-                ctx.darkenAdjusted(3)
-                window.requestAnimationFrame { animateIntro() }
-            } else {
-                frameCount = 0
-                HTMLAnimationPage(ctx)
-            }
-        }
-    }
-}
-
-
+var introPage : IntroPage? = null
 fun main(args: Array<String>) {
     val canvas = document.getElementById("where the magic happens") as HTMLCanvasElement
     canvas.width = window.innerWidth
@@ -72,6 +21,17 @@ fun main(args: Array<String>) {
     ctx.globalCompositeOperation = "source-over"
     frameRateCalculator(ctx)
     FADE_TIME = ceil(adjustForFrameRate(255.0)).toInt()
+    window.addEventListener("hashchange", {event ->
+        run {
+            if (document.URL.endsWith("#skip") && introPage != null) {
+                introPage!!.skip()
+                introPage = null
+                document.body?.style?.background = "#000"
+                ctx.darken(255)
+                IndexPage(ctx)
+            }
+        }
+    })
 }
 
 var FADE_TIME = 255
@@ -127,7 +87,7 @@ fun frameRateCalculator(ctx: CanvasRenderingContext2D) {
             document.body?.style?.background = "#000"
             IndexPage(ctx)
         }else{
-            Page(ctx)
+            introPage = IntroPage(ctx)
         }
     }
 }

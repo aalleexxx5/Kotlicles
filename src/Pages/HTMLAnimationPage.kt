@@ -24,6 +24,8 @@ class HTMLAnimationPage(val ctx : CanvasRenderingContext2D){
                     ))
             ))
     ))
+    var skipping = false
+    var kotlinPage : KotlinPage? = null
     var wait = 120
 
     init {
@@ -35,6 +37,7 @@ class HTMLAnimationPage(val ctx : CanvasRenderingContext2D){
     }
 
     fun animateHTML(){
+        if (skipping) return
         wipe()
         if (!htmlanimation.isOutOfBounds(0,0)){
             htmlanimation.drawAsRoot(ctx)
@@ -46,7 +49,7 @@ class HTMLAnimationPage(val ctx : CanvasRenderingContext2D){
                 wait--
                 window.requestAnimationFrame { animateHTML() }
             }else{
-                KotlinPage(ctx)
+                kotlinPage = KotlinPage(ctx)
             }
         }
     }
@@ -64,6 +67,11 @@ class HTMLAnimationPage(val ctx : CanvasRenderingContext2D){
                 ctx.darkenAdjusted(255)
             }
         }
+    }
+
+    fun skip() {
+        skipping = true
+        kotlinPage?.skip()
     }
 
 

@@ -15,7 +15,10 @@ class KotlinPage(val ctx : CanvasRenderingContext2D) {
 
 
     var wait = FADE_TIME
+    private var skipping: Boolean = false
+
     fun animateBulb(){
+        if (skipping) return
         if (!bulb.isOutOfBounds(0,0)){
             ctx.darkenAdjusted(255)
             bulb.draw(ctx)
@@ -34,6 +37,7 @@ class KotlinPage(val ctx : CanvasRenderingContext2D) {
     }
 
     private fun animateText() {
+        if (skipping) return
         if (!idea.isOutOfBounds(0,0)){
             ctx.darkenAdjusted(255)
             idea.draw(ctx)
@@ -48,6 +52,10 @@ class KotlinPage(val ctx : CanvasRenderingContext2D) {
                 IndexPage(ctx)
             }
         }
+    }
+
+    fun skip() {
+        skipping = true;
     }
 
     init {
