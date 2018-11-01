@@ -10,7 +10,7 @@ import kotlin.browser.document
 import kotlin.browser.window
 
 class HTMLAnimationPage(val ctx : CanvasRenderingContext2D){
-    val visuals = VisualParameters("16px serif", 3.0, 0.0, 16.0, "#000", false)
+    val visuals = VisualParameters("16px serif", 5.0, 0.0, 16.0, "#000", false)
     val elementVisuals = VisualParameters("16px serif", 3.0, 0.0, 0.0, "#000", false)
     val htmlanimation : HTMLTypingElement = HTMLTypingElement("HTML", {}, visuals, listOf(
             HTMLTypingElement("head", {}, visuals, listOf(

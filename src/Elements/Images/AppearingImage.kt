@@ -21,6 +21,10 @@ class AppearingImage(val dynamics: Dynamics, val image : HTMLImageElement, val a
         this.image.height = height
     }
 
+    init {
+        update()
+    }
+
 
     override fun update() {
         dynamics.update()

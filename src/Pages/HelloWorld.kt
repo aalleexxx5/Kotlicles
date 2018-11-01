@@ -14,10 +14,10 @@ import kotlin.math.min
 class Page(val ctx: CanvasRenderingContext2D) {
     val image = AppearingImage(
             document.getElementById("exclamation") as HTMLImageElement,
-            ctx.canvas.width / 2.0, (ctx.canvas.height + min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75)) / 2, min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75).toInt(), min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75).toInt(), -4.0
+            ctx.canvas.width / 2.0, (ctx.canvas.height + min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75)) / 2, min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75).toInt(), min(ctx.canvas.width * 0.75, ctx.canvas.height * 0.75).toInt(), -3.0
     )
     val lineSpace = 5
-    val greetingText = MultilineTypingText(document.getElementById("greeting") as HTMLParagraphElement, "16px Serif", 3.0, 25, 1.0, 16.0 + lineSpace, false)
+    val greetingText = MultilineTypingText(document.getElementById("greeting") as HTMLParagraphElement, "16px Serif", 5.0, 30, 1.0, 16.0 + lineSpace, false)
 
     var frameCount = 0
 
@@ -51,9 +51,9 @@ class Page(val ctx: CanvasRenderingContext2D) {
             greetingText.update()
             window.requestAnimationFrame { animateIntro() }
         } else {
-            if (frameCount <= FADE_TIME / 5) {
+            if (frameCount <= FADE_TIME / 3) {
                 frameCount++
-                ctx.darkenAdjusted(5)
+                ctx.darkenAdjusted(3)
                 window.requestAnimationFrame { animateIntro() }
             } else {
                 frameCount = 0
