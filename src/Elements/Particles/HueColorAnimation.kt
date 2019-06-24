@@ -1,12 +1,13 @@
 package Elements.Particles
 
-import kotlin.js.Math
+import Pages.random
+
 
 /**
  * Created by Alex on 22/11/2017.
  */
 class HueColorAnimation() {
-    var h : Int = (Math.random()*360).toInt()
+    var h : Int = (random()*360).toInt()
     var s : Byte = 100
     var l : Byte = 50
 

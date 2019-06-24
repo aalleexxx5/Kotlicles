@@ -19,11 +19,11 @@ class IndexPage(val ctx: CanvasRenderingContext2D) {
     val centerX = ctx.canvas.width/2.0
     val socialX =  (centerX-socialDim/2)-(socialDim/2) // -(socialDim/2) if there is an even number of socials
     val socialY = ctx.canvas.height - socialDim - padding
-    val facebook = GreyoutIcon(document.getElementById("facebook") as HTMLImageElement, socialX + -2 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "http://www.facebook.com/alex.holberg.94" })
-    val twitter = GreyoutIcon(document.getElementById("twitter") as HTMLImageElement, socialX + -1 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "https://twitter.com/Ximias" })
-    val git = GreyoutIcon(document.getElementById("git") as HTMLImageElement, socialX + 0 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "https://github.com/aalleexxx5" })
-    val linkedin = GreyoutIcon(document.getElementById("linkedin") as HTMLImageElement, socialX + 1 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "https://www.linkedin.com/in/alex-holberg-46a610174/" })
-    val mail = GreyoutIcon(document.getElementById("gmail") as HTMLImageElement, socialX + 2 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "mailto:alexx4387@gmail.com" })
+    val facebook = GreyoutIcon(document.getElementById("facebook") as HTMLImageElement, socialX + -2 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "http://www.facebook.com/alex.holberg.94" }, 400, 10)
+    val twitter = GreyoutIcon(document.getElementById("twitter") as HTMLImageElement, socialX + -1 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "https://twitter.com/Ximias" }, 400, 20)
+    val git = GreyoutIcon(document.getElementById("git") as HTMLImageElement, socialX + 0 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "https://github.com/aalleexxx5" }, 400, 30)
+    val linkedin = GreyoutIcon(document.getElementById("linkedin") as HTMLImageElement, socialX + 1 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "https://www.linkedin.com/in/alex-holberg-46a610174/" },400,40)
+    val mail = GreyoutIcon(document.getElementById("gmail") as HTMLImageElement, socialX + 2 * (padding + socialDim), socialY, socialDim, socialDim, fadeFrames, { window.location.href = "mailto:alexx4387@gmail.com" },400, 50)
     val ximias = GreyoutIcon(document.getElementById("ximias") as HTMLImageElement, centerX - 128, ctx.canvas.height / 2 - 128.0, 256.0, 256.0, fadeFrames, { js("""alert("This will eventually lead to a page featuring selected side-projects, and articles about them.")""")})
 
     val quotes = MultilineLoopingPulsingText(document.getElementById("inspiration") as HTMLParagraphElement, FADE_TIME, "80px verdana", "#F48A00", 800, centerX, 85.0, true, 150).fitToWidth(ctx,if(ctx.canvas.width>ctx.canvas.height) (ctx.canvas.width/2) else ctx.canvas.width)

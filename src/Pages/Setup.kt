@@ -10,6 +10,7 @@ import kotlin.js.Date
 import kotlin.*
 import kotlin.math.ceil
 import kotlin.math.min
+import kotlin.random.Random
 
 
 var introPage : IntroPage? = null
@@ -23,10 +24,11 @@ fun main(args: Array<String>) {
     FADE_TIME = ceil(adjustForFrameRate(255.0)).toInt()
     window.addEventListener("hashchange", {event ->
         run {
-            if (document.URL.endsWith("#skip") && introPage != null) {
+            if (window.location.hash.endsWith("skip") && introPage != null) {
                 introPage!!.skip()
                 introPage = null
                 document.body?.style?.background = "#000"
+                document.head?.title = "Ximias -introduction"
                 ctx.darken(255)
                 IndexPage(ctx)
             }
@@ -83,12 +85,16 @@ fun frameRateCalculator(ctx: CanvasRenderingContext2D) {
     if (frameCalCount< 50) {
         window.requestAnimationFrame { frameRateCalculator(ctx) }
     }else{
-        if (document.URL.endsWith("#skip")){
+        if (window.location.hash.endsWith("skip")){
             document.body?.style?.background = "#000"
+            document.head?.title = "Ximias -introduction"
             IndexPage(ctx)
         }else{
             introPage = IntroPage(ctx)
         }
     }
 }
+
+val rand = Random(0x0777)
+fun random() : Double{return rand.nextDouble()}
 fun adjustForFrameRate(framesIn60: Double) = framesIn60 * (fps/60.0)

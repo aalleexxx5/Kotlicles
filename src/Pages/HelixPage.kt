@@ -7,6 +7,9 @@ import Elements.Particles.NHelix
 import Elements.Particles.Particle
 import org.w3c.dom.Range
 import kotlin.js.Math
+import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.random.Random
 
 class HelixPage(private var ctx: org.w3c.dom.CanvasRenderingContext2D) {
     var particles : Array<Animatable?> = arrayOfNulls((ctx.canvas.width*ctx.canvas.height)/160000+1)
@@ -32,7 +35,7 @@ class HelixPage(private var ctx: org.w3c.dom.CanvasRenderingContext2D) {
     private fun populateParticles(){
         particles.forEachIndexed { index, particle ->
             if (particle == null||particle.isOutOfBounds(ctx.canvas.width,ctx.canvas.height)) {
-                if (kotlin.js.Math.random() < 0.1) {
+                if (random() < 0.1) {
                     particles[index] = randomDoubleHelix()
                 }
                 else {
@@ -46,9 +49,9 @@ class HelixPage(private var ctx: org.w3c.dom.CanvasRenderingContext2D) {
     fun randomParticle() : Particle {
         return Particle(
                 Dynamics(
-                        Math.random() * ctx.canvas.width,
-                        Math.random() * ctx.canvas.height,
-                        Math.random() * 2 * Math.PI,
+                        random() * ctx.canvas.width,
+                        random() * ctx.canvas.height,
+                        random() * 2 * PI,
                         randomizeWithMinimum(-2.0,2.0,0.2),
                         randomizeWithMinimum(-2.0,2.0,0.2),
                         randomizeWithMinimum(-0.5,0.5,0.05)
@@ -58,9 +61,9 @@ class HelixPage(private var ctx: org.w3c.dom.CanvasRenderingContext2D) {
     fun randomHelix() : LineHelix {
         return LineHelix(
                 Dynamics(
-                        Math.random() * ctx.canvas.width,
-                        Math.random() * ctx.canvas.height,
-                        Math.random() * 2 * Math.PI,
+                        random() * ctx.canvas.width,
+                        random() * ctx.canvas.height,
+                        random() * 2 * PI,
                         randomizeWithMinimum(-1.0,1.0,0.1),
                         randomizeWithMinimum(-1.0,1.0,0.1),
                         randomizeWithMinimum(-0.125,0.125,0.005)
@@ -71,9 +74,9 @@ class HelixPage(private var ctx: org.w3c.dom.CanvasRenderingContext2D) {
     fun randomDoubleHelix() : NHelix {
         return NHelix(
                 Dynamics(
-                        Math.random() * ctx.canvas.width,
-                        Math.random() * ctx.canvas.height,
-                        Math.random() * 2 * Math.PI,
+                        random() * ctx.canvas.width,
+                        random() * ctx.canvas.height,
+                        random() * 2 * PI,
                         randomizeWithMinimum(-1.0,1.0,0.15),
                         randomizeWithMinimum(-1.0,1.0,0.15),
                         randomizeWithMinimum(-0.1,0.1,0.005)
@@ -82,8 +85,8 @@ class HelixPage(private var ctx: org.w3c.dom.CanvasRenderingContext2D) {
     }
 
     fun randomizeWithMinimum(min : Double ,max : Double, lowerValue : Double): Double {
-        var ans = Math.random() * (max+Math.abs(min)) + min
-        if (Math.abs(ans) < lowerValue){
+        var ans = random() * (max+abs(min)) + min
+        if (abs(ans) < lowerValue){
             if (ans<0){
                 ans-=lowerValue
             }else{

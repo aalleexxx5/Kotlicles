@@ -5,13 +5,16 @@ import Pages.adjustForFrameRate
 import org.w3c.dom.*
 import kotlin.browser.document
 import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.roundToInt
 
-class GreyoutIcon(val image : HTMLImageElement,var locationX : Double,var locationY : Double, val width : Double, val height : Double,fadeFrames : Int,val onClick : () -> Unit) : Clickable {
+class GreyoutIcon(val image : HTMLImageElement,var locationX : Double,var locationY : Double, val width : Double, val height : Double, fadeFrames : Int,val onClick : () -> Unit, val fadeInterval : Int = 0, val fadeDelay : Int = 0) : Clickable {
     val fadeFrames = ceil(adjustForFrameRate(fadeFrames.toDouble())).toInt()
     var step = this.fadeFrames
     val greyImage : ImageData
     val greyCanvas = document.createElement("canvas") as HTMLCanvasElement
-
+    val fadeIntervalFrames = ceil(adjustForFrameRate(fadeInterval.toDouble())).toInt()
+    var fadeStep = adjustForFrameRate(fadeDelay.toDouble()).toInt()
     init {
         greyCanvas.width = width.toInt()
         greyCanvas.height = height.toInt()
@@ -43,6 +46,7 @@ class GreyoutIcon(val image : HTMLImageElement,var locationX : Double,var locati
 
     override fun onMouseOverUpdate(ctx: CanvasRenderingContext2D) {
         if (step>0){
+            fadeStep = fadeIntervalFrames
             step -=2
         }
     }
@@ -56,6 +60,15 @@ class GreyoutIcon(val image : HTMLImageElement,var locationX : Double,var locati
         ctx.globalCompositeOperation = "source-over"
         ctx.drawImage(greyCanvas, locationX, locationY)
         //ctx.putImageData(greyImage, locationX, locationY)
+        if (fadeInterval > 0){
+            fadeStep--
+            if (fadeStep<20){
+                step -=2
+                //step = (fadeFrames/1.2).toInt()
+            }
+            if (fadeStep <= 0) fadeStep = fadeIntervalFrames
+        }
+
         if (step<fadeFrames){
             step++
             ctx.globalAlpha = ((fadeFrames-step)*(1/fadeFrames.toDouble()))
